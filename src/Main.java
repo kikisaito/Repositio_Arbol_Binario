@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
         ArbolBinario arbol = new ArbolBinario();
@@ -12,7 +10,7 @@ public class Main {
         do {
             System.out.println("\n=== Gestion de Participantes ===");
             System.out.println("1. Agregar participantes");
-            System.out.println("2. Visualizar matricula y categoria de todos los participantes");
+            System.out.println("2. Visualizar recorridos (Pre, In, Post)"); // Texto actualizado
             System.out.println("3. Visualizar estadisticas");
             System.out.println("4. Salir");
             System.out.print("Elige una opcion: ");
@@ -24,7 +22,7 @@ public class Main {
                     break;
 
                 case 2:
-                    arbol.visualizarParticipantes();
+                    arbol.visualizarRecorridos();
                     break;
 
                 case 3:
@@ -60,15 +58,9 @@ public class Main {
             String categoria;
 
             switch (opcCat) {
-                case 1:
-                    categoria = "Principiante";
-                    break;
-                case 2:
-                    categoria = "Intermedio";
-                    break;
-                case 3:
-                    categoria = "Avanzado";
-                    break;
+                case 1: categoria = "Principiante"; break;
+                case 2: categoria = "Intermedio"; break;
+                case 3: categoria = "Avanzado"; break;
                 default:
                     System.out.println("Opcion no válida, se asignara 'Principiante' por defecto.");
                     categoria = "Principiante";
@@ -79,7 +71,6 @@ public class Main {
             int edad = entrada.nextInt();
 
             Participante nuevo = new Participante(matricula, categoria, edad);
-
             if (!arbol.validarRaiz()) {
                 arbol.setRaiz(nuevo);
                 System.out.println("Participante agregado como raiz del arbol.");

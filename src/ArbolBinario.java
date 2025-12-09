@@ -1,6 +1,5 @@
 public class ArbolBinario {
     Nodo raiz = new Nodo();
-
     private static class Estadisticas {
         int totalParticipantes = 0;
         int sumaEdades = 0;
@@ -24,33 +23,51 @@ public class ArbolBinario {
         return raiz.getDato() != null;
     }
 
+    public void visualizarRecorridos() {
+        if (!validarRaiz()) {
+            System.out.println("No hay participantes registrados.");
+            return;
+        }
+        System.out.println("\n--- Recorrido Preorden ---");
+        preorden(raiz);
+
+        System.out.println("\n--- Recorrido Inorden ---");
+        inorden(raiz);
+
+        System.out.println("\n--- Recorrido Postorden ---");
+        postorden(raiz);
+    }
 
     public void preorden(Nodo raiz) {
-        if (raiz != null) {
+        if (raiz != null && raiz.getDato() != null) {
             Participante p = raiz.getDato();
             System.out.println("Matrícula: " + p.getMatricula()
                     + " | Categoría: " + p.getCategoria()
                     + " | Edad: " + p.getEdad());
+
             preorden(raiz.getIzq());
             preorden(raiz.getDer());
         }
     }
 
     public void inorden(Nodo raiz) {
-        if (raiz != null) {
+        if (raiz != null && raiz.getDato() != null) {
             inorden(raiz.getIzq());
+
             Participante p = raiz.getDato();
             System.out.println("Matrícula: " + p.getMatricula()
                     + " | Categoría: " + p.getCategoria()
                     + " | Edad: " + p.getEdad());
+
             inorden(raiz.getDer());
         }
     }
 
     public void postorden(Nodo raiz) {
-        if (raiz != null) {
+        if (raiz != null && raiz.getDato() != null) {
             postorden(raiz.getIzq());
             postorden(raiz.getDer());
+
             Participante p = raiz.getDato();
             System.out.println("Matrícula: " + p.getMatricula()
                     + " | Categoría: " + p.getCategoria()
@@ -58,40 +75,6 @@ public class ArbolBinario {
         }
     }
 
-    public void visualizarRecorridos() {
-        if (!validarRaiz()) {
-            System.out.println("No hay participantes registrados.");
-            return;
-        }
-        System.out.println("Recorrido Preorden:");
-        preorden(raiz);
-        System.out.println("\nRecorrido Inorden:");
-        inorden(raiz);
-        System.out.println("\nRecorrido Postorden:");
-        postorden(raiz);
-    }
-
-    // ===== Método específico para mostrar solo matrícula + categoría =====
-    public void visualizarParticipantes() {
-        if (!validarRaiz()) {
-            System.out.println("No hay participantes registrados.");
-            return;
-        }
-        System.out.println("Listado de participantes (Inorden):");
-        visualizarParticipantesInorden(raiz);
-    }
-
-    private void visualizarParticipantesInorden(Nodo raiz) {
-        if (raiz != null) {
-            visualizarParticipantesInorden(raiz.getIzq());
-            Participante p = raiz.getDato();
-            System.out.println("Matrícula: " + p.getMatricula()
-                    + " | Categoría: " + p.getCategoria());
-            visualizarParticipantesInorden(raiz.getDer());
-        }
-    }
-
-    // ===== Inserción en el árbol, ordenado por matrícula =====
     public void insertarNodo(Nodo raiz, Participante objNuevo) {
         if (validarRaiz()) {
             if (objNuevo.getMatricula() < raiz.getDato().getMatricula()) {
@@ -109,51 +92,22 @@ public class ArbolBinario {
                     insertarNodo(raiz.getDer(), objNuevo);
                 }
             } else {
-                System.out.println("Ya existe un participante con la matrícula " + objNuevo.getMatricula());
+                System.out.println("Ya existe la matrícula " + objNuevo.getMatricula());
             }
         } else {
             System.out.println("Primero debes definir la raíz.");
         }
     }
 
-    // ===== Búsqueda por matrícula (opcional, pero basado en el ejemplo) =====
-    public void busqueda(Nodo raiz, int valorBuscado) {
-        if (raiz == null) {
-            System.out.println("No encontrado.");
-            return;
-        }
-
-        if (valorBuscado < raiz.getDato().getMatricula()) {
-            if (raiz.getIzq() == null) {
-                System.out.println("No encontrado.");
-            } else {
-                busqueda(raiz.getIzq(), valorBuscado);
-            }
-        } else if (valorBuscado > raiz.getDato().getMatricula()) {
-            if (raiz.getDer() == null) {
-                System.out.println("No encontrado.");
-            } else {
-                busqueda(raiz.getDer(), valorBuscado);
-            }
-        } else {
-            Participante p = raiz.getDato();
-            System.out.println("Participante encontrado: Matrícula " + p.getMatricula()
-                    + " | Categoría: " + p.getCategoria()
-                    + " | Edad: " + p.getEdad());
-        }
-    }
-
-    // ===== Estadísticas =====
     public void mostrarEstadisticas() {
         if (!validarRaiz()) {
             System.out.println("No hay participantes registrados.");
             return;
         }
-
         Estadisticas est = new Estadisticas();
         calcularEstadisticas(raiz, est);
 
-        System.out.println("=== Estadísticas del concurso ===");
+        System.out.println("\n=== Estadísticas del concurso ===");
         System.out.println("Total de participantes: " + est.totalParticipantes);
 
         if (est.totalParticipantes > 0) {
@@ -168,19 +122,19 @@ public class ArbolBinario {
     }
 
     private void calcularEstadisticas(Nodo raiz, Estadisticas est) {
-        if (raiz != null) {
+        if (raiz != null && raiz.getDato() != null) {
             calcularEstadisticas(raiz.getIzq(), est);
 
             Participante p = raiz.getDato();
             est.totalParticipantes++;
             est.sumaEdades += p.getEdad();
 
-            String cat = p.getCategoria().toLowerCase();
-            if (cat.equals("principiante")) {
+            String cat = p.getCategoria();
+            if (cat.equalsIgnoreCase("Principiante")) {
                 est.principiantes++;
-            } else if (cat.equals("intermedio")) {
+            } else if (cat.equalsIgnoreCase("Intermedio")) {
                 est.intermedios++;
-            } else if (cat.equals("avanzado")) {
+            } else if (cat.equalsIgnoreCase("Avanzado")) {
                 est.avanzados++;
             }
 
